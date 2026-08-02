@@ -5,7 +5,7 @@ REPO_URL="https://github.com/sadman-shourov/prime-dev.git"
 INSTALL_DIR="$HOME/.claude-prime"
 CLAUDE_DIR="$HOME/.claude"
 
-echo "=== Gold Standard Dev Installer ==="
+echo "=== Prime Installer ==="
 
 if [ -d "$INSTALL_DIR" ]; then
     echo "Updating existing install..."

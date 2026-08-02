@@ -1,4 +1,4 @@
-# 🏗️ Gold Standard Dev
+# ⚡ Prime
 
 > *One command. Zero drift. Claude Code on steroids.*
 >
