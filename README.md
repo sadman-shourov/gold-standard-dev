@@ -66,6 +66,7 @@ That's it. 500+ files. Everything Claude Code needs to build software properly.
 ✔ Auth: NextAuth, useRole(), requireRole() middleware
 ✔ Pages: PageShell → PageHeader → Grid → Cards
 ✔ Forms: React Hook Form + Zod, inline errors
+✔ Languages: TS PascalCase, Go exported/unexported, Python snake_case
 ✔ ...52 more patterns
 ```
 
@@ -90,7 +91,7 @@ Claude: /gsd:plan-phase  →  /gsd:execute-phase  →  /gsd:verify-work  →  /g
 | Layer | What | Who loads it |
 |---|---|---|
 | **Standards** | No hand-rolled, theme tokens only, layout discipline, architecture rules | `gsd-executor`, `gsd-code-reviewer`, `gsd-verifier`, `gsd-ui-checker` |
-| **DNA** | 57 project-specific patterns (API, auth, design, forms, everything) | All agents |
+| **DNA** | 57 project-specific patterns (API, auth, design, forms, languages, everything) | All agents |
 | **Skills** | caveman · frontend-design · ui-ux-pro-max · agent-browser · **self-heal** | Orchestrator + design/UI/testing agents |
 | **Graphify** | Codebase knowledge graph — every agent queries before touching code | On-demand per agent |
 | **Self-heal** | Finds drift → fixes it → updates CONTEXT.md → never happens again | `gsd-code-reviewer`, `gsd-verifier` |
