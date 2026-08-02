@@ -1,19 +1,20 @@
 # Gold Standard Dev
 
-An operating system for Claude Code. Load this repo. It tells Claude how to build software with zero drift.
+An operating system for Claude Code. One command installs everything. Zero external dependencies for skills, agents, commands or standards. Only two binary tools (Graphify, Agent Browser) are pip/npm installed.
 
 ## What This Repo Contains
 
-23 markdown files. No code. No dependencies of its own. It is a set of instructions that Claude Code loads on startup.
+510+ files. Everything Claude Code needs to build software with zero drift.
 
 | Directory | Contains | Loaded when |
 |---|---|---|
 | `CLAUDE.md` | CTO persona + delegation tree | Every Claude Code session |
-| `agents/` | 8 specialist agent definitions | CTO delegates via `Task(agent="...")` |
+| `agents/` | 9 gold-standard agent definitions | CTO delegates via `Task(agent="...")` |
 | `standards/` | 4 anti-drift rule files | Loaded by agents before writing code |
-| `skills/` | 4 skill stubs (install instructions) | Read once during `install.sh` |
+| `skills/` | 4 skills (full, not stubs) | Loaded by agents on demand |
 | `workflows/` | 4 workflow definitions | Read when CTO routes a task type |
-| `install.sh` | One-command setup script | Run once on first use |
+| `vendor/gsd-core/` | GSD Core vendored (71 commands + 34 agents + CLI) | Symlinked into `~/.claude/` |
+| `install.sh` | One-command setup | Run once |
 | `MEMORY.md` | Three-layer memory architecture | Read during `/gsd-onboard` |
 
 ## Skills (Bundled)
@@ -29,11 +30,10 @@ Four skills ship with this repo. No external install needed.
 
 ## External Tools Required
 
-`install.sh` installs these. None are bundled.
+Only two. Both are binaries that cannot be bundled as markdown files.
 
 | Tool | What it does | Install command |
 |---|---|---|
-| **GSD Core** | Phase loop + 35 subagents | `npx @opengsd/gsd-core@latest` |
 | **Graphify** | Codebase knowledge graph | `pip install graphifyy` |
 | **Agent Browser** | Browser automation CLI (used by QA agent) | `npm i -g agent-browser && agent-browser install` |
 
@@ -45,9 +45,9 @@ curl -sL https://raw.githubusercontent.com/sadman-shourov/gold-standard-dev/main
 
 What this does:
 1. Clones this repo to `~/.claude-gold/`
-2. Symlinks every file into `~/.claude/`
-3. Installs GSD Core, Graphify, Claude Code skills, Agent Browser
-4. Claude Code now loads `~/.claude/CLAUDE.md` on every session
+2. Symlinks everything into `~/.claude/` (510+ files — GSD Core, agents, skills, standards, workflows)
+3. pip installs Graphify, npm installs Agent Browser
+4. Claude Code now loads `~/.claude/CLAUDE.md` on every session with all 71 GSD commands + 9 gold standard agents + 4 skills
 
 ## First Time on a Project
 
