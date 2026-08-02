@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_URL="https://github.com/sadman-shourov/gold-standard-dev.git"
-INSTALL_DIR="$HOME/.claude-gold"
+REPO_URL="https://github.com/sadman-shourov/prime-dev.git"
+INSTALL_DIR="$HOME/.claude-prime"
 CLAUDE_DIR="$HOME/.claude"
 
 echo "=== Gold Standard Dev Installer ==="
@@ -12,7 +12,7 @@ if [ -d "$INSTALL_DIR" ]; then
     cd "$INSTALL_DIR"
     git pull --ff-only
 else
-    echo "Cloning gold-standard-dev..."
+    echo "Cloning prime-dev..."
     git clone "$REPO_URL" "$INSTALL_DIR"
 fi
 

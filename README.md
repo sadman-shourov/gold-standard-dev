@@ -40,7 +40,7 @@
 ## ⚡ Install
 
 ```bash
-curl -sL https://raw.githubusercontent.com/sadman-shourov/gold-standard-dev/main/install.sh | bash
+curl -sL https://raw.githubusercontent.com/sadman-shourov/prime-dev/main/install.sh | bash
 ```
 
 That's it. 500+ files. Everything Claude Code needs to build software properly.
