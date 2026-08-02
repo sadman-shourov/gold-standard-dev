@@ -44,13 +44,14 @@ gsd-mempalace-curator — archives learnings to CONTEXT.md
 
 ## What's Inbuilt
 
-| Layer | Contents |
-|---|---|
-| Orchestrator | `CLAUDE.md` — routes to GSD commands |
-| Standards | 4 files — component-discipline, code-consistency, page-layout, architecture |
-| Skills | 4 skills — caveman, frontend-design, ui-ux-pro-max (19 CSVs + scripts), agent-browser |
-| Framework | GSD Core — 71 slash commands + 34 agents + CLI tools |
-| Memory | GSD mempalace (decisions → CONTEXT.md) + Graphify (code graph) |
+| Layer | Contents | Wired to |
+|---|---|---|
+| Orchestrator | `CLAUDE.md` — routes to GSD commands | Every session |
+| Standards | 4 files — component-discipline, code-consistency, page-layout, architecture | gsd-executor, gsd-code-reviewer, gsd-verifier, gsd-ui-checker |
+| Skills | caveman (comms), frontend-design + ui-ux-pro-max (design), agent-browser (testing) | Orchestrator, gsd-ui-researcher, gsd-executor, gsd-verifier |
+| Framework | GSD Core — 71 slash commands + 34 agents + CLI | Entire pipeline |
+| DNA | 57 patterns extracted per project into CONTEXT.md | All agents during execution |
+| Memory | GSD mempalace (decisions → CONTEXT.md) + Graphify (code graph) | Post-milestone, on-demand |
 
 ## What's External
 
