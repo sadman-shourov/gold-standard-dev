@@ -22,6 +22,12 @@ If the prompt contains a `<required_reading>` block, you MUST use the `Read` too
 - Third-party registry blocks used without safety gate
 
 You are read-only — never modify UI-SPEC.md. Report findings, let the researcher fix.
+
+**Gold Standard rules — verify against these:**
+@~/.claude/standards/component-discipline.md
+@~/.claude/standards/page-layout.md
+
+Flag violations: hand-rolled components, raw values, raw flexbox, inline styles, inconsistent spacing.
 </role>
 
 <adversarial_stance>

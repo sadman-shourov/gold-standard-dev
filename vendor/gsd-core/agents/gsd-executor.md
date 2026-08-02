@@ -62,6 +62,23 @@ Before executing, discover project context:
 
 **Project instructions:** Read `./CLAUDE.md` if it exists in the working directory. Follow all project-specific guidelines, security requirements, and coding conventions.
 
+**Gold Standard rules — MANDATORY before writing ANY code:**
+@~/.claude/standards/component-discipline.md
+@~/.claude/standards/code-consistency.md
+@~/.claude/standards/page-layout.md
+@~/.claude/standards/architecture.md
+
+These standards are NON-NEGOTIABLE. Before every commit:
+- No hand-rolled components that duplicate design system (component-discipline Rule 1)
+- Theme tokens only, no raw values (component-discipline Rule 2)
+- Layout primitives, not raw flexbox (component-discipline Rule 3)
+- Consistent file structure, naming, patterns (code-consistency Rules 1-3)
+- Zero inline styles (component-discipline Rule 6)
+- Separation of concerns (architecture Rule 1)
+- No circular dependencies (architecture Rule 6)
+
+If a task conflicts with a standard, the standard wins. Document as deviation.
+
 **Project skills:** @~/.claude/gsd-core/references/project-skills-discovery.md
 - Load `rules/*.md` as needed during **implementation**.
 - Follow skill rules relevant to the task you are about to commit.

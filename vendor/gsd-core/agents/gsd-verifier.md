@@ -20,6 +20,14 @@ Goal-backward verification. Start from what the phase SHOULD deliver, verify it 
 
 **Critical mindset:** Do NOT trust SUMMARY.md claims. SUMMARYs document what Claude SAID it did. You verify what ACTUALLY exists in the code. These often differ.
 
+**Gold Standard rules — verify against these:**
+@~/.claude/standards/component-discipline.md
+@~/.claude/standards/code-consistency.md
+@~/.claude/standards/page-layout.md
+@~/.claude/standards/architecture.md
+
+Check that implementation follows all standards. Standard violation = verification failure.
+
 </role>
 
 <adversarial_stance>

@@ -1,130 +1,91 @@
 # Gold Standard Dev
 
-An operating system for Claude Code. One command installs everything. Zero external dependencies for skills, agents, commands or standards. Only two binary tools (Graphify, Agent Browser) are pip/npm installed.
+Operating system for Claude Code. One command. Zero drift. Everything inbuilt.
 
-## What This Repo Contains
+## Architecture
 
-510+ files. Everything Claude Code needs to build software with zero drift.
+```
+CLAUDE.md          → Orchestrator. Routes every task through GSD phase loop.
+standards/         → 4 anti-drift rules. Injected into GSD agents via patches.
+skills/            → 4 bundled skills. Loaded by agents on demand.
+vendor/gsd-core/   → GSD Core (71 commands + 34 agents + CLI). Patched with our standards.
+```
 
-| Directory | Contains | Loaded when |
-|---|---|---|
-| `CLAUDE.md` | CTO persona + delegation tree | Every Claude Code session |
-| `agents/` | 9 gold-standard agent definitions | CTO delegates via `Task(agent="...")` |
-| `standards/` | 4 anti-drift rule files | Loaded by agents before writing code |
-| `skills/` | 4 skills (full, not stubs) | Loaded by agents on demand |
-| `workflows/` | 4 workflow definitions | Read when CTO routes a task type |
-| `vendor/gsd-core/` | GSD Core vendored (71 commands + 34 agents + CLI) | Symlinked into `~/.claude/` |
-| `install.sh` | One-command setup | Run once |
-| `MEMORY.md` | Three-layer memory architecture | Read during `/gsd-onboard` |
+## How It Works
 
-## Skills (Bundled)
+```
+User: "Build a dashboard"
+  │
+CLAUDE.md: "Feature. Route to /gsd:plan-phase."
+  │
+  ▼
+gsd-planner spawns with:
+  - @standards/architecture.md
+  - graphify query for codebase context
+  → Produces PLAN.md
+  │
+  ▼
+gsd-executor spawns with:
+  - @standards/component-discipline.md (no hand-rolled, theme tokens only)
+  - @standards/code-consistency.md (consistent patterns)
+  - @standards/page-layout.md (layout discipline)
+  - @standards/architecture.md (separation of concerns)
+  - @skills/frontend-design, @skills/ui-ux-pro-max (if UI)
+  → Produces working code, commits
+  │
+  ▼
+gsd-verifier checks against standards + plan
+gsd-code-reviewer hunts bugs, flags standard violations
+  │
+  ▼
+/gsd:ship — PR, deploy
+gsd-mempalace-curator — archives learnings to CONTEXT.md
+```
 
-Four skills ship with this repo. No external install needed.
+## What's Inbuilt
 
-| Skill | Files | What it does |
-|---|---|---|
-| `caveman/` | `SKILL.md` | Ultra-compressed communication |
-| `frontend-design/` | `SKILL.md`, `LICENSE.txt` | Bold, distinctive web design. Source: `anthropics/skills` |
-| `ui-ux-pro-max/` | `SKILL.md`, `data/` (19 CSVs), `scripts/` | 50 styles, 21 palettes, 50 font pairings, 20 charts, 8 stacks. Source: `binjuhor/shadcn-lar` |
-| `agent-browser/` | `SKILL.md` | Browser automation for testing/QA. Source: `vercel-labs/agent-browser` |
+| Layer | Contents |
+|---|---|
+| Orchestrator | `CLAUDE.md` — routes to GSD commands |
+| Standards | 4 files — component-discipline, code-consistency, page-layout, architecture |
+| Skills | 4 skills — caveman, frontend-design, ui-ux-pro-max (19 CSVs + scripts), agent-browser |
+| Framework | GSD Core — 71 slash commands + 34 agents + CLI tools |
+| Memory | GSD mempalace (decisions → CONTEXT.md) + Graphify (code graph) |
 
-## External Tools Required
+## What's External
 
-Only two. Both are binaries that cannot be bundled as markdown files.
+| Tool | Why |
+|---|---|
+| Graphify | Python package. Builds codebase knowledge graph. |
+| Agent Browser | Rust CLI. Browser automation for QA testing. |
 
-| Tool | What it does | Install command |
-|---|---|---|
-| **Graphify** | Codebase knowledge graph | `pip install graphifyy` |
-| **Agent Browser** | Browser automation CLI (used by QA agent) | `npm i -g agent-browser && agent-browser install` |
-
-## One-Command Install
+## Install
 
 ```bash
 curl -sL https://raw.githubusercontent.com/sadman-shourov/gold-standard-dev/main/install.sh | bash
 ```
 
-What this does:
-1. Clones this repo to `~/.claude-gold/`
-2. Symlinks everything into `~/.claude/` (510+ files — GSD Core, agents, skills, standards, workflows)
-3. pip installs Graphify, npm installs Agent Browser
-4. Claude Code now loads `~/.claude/CLAUDE.md` on every session with all 71 GSD commands + 9 gold standard agents + 4 skills
-
 ## First Time on a Project
 
 ```
-/gsd-onboard
+/gsd:onboard
 ```
 
-What happens:
-1. GSD Core indexes the codebase, creates `.planning/`
-2. Graphify builds a knowledge graph in `graphify-out/`
-3. PM agent extracts tech stack, design system, conventions, patterns
-4. CONTEXT.md and STATE.md are created
-5. CTO reviews ROADMAP.md, picks first milestone
-
-This takes 3-10 minutes depending on repo size. Run it once per project.
+What happens: GSD indexes codebase → Graphify builds knowledge graph → STATE.md + CONTEXT.md created → CTO reviews ROADMAP.md.
 
 ## Daily Use
 
-Start Claude Code in any repo that has been onboarded:
+Describe what you want. Claude routes it.
 
-```bash
-claude
-```
-
-Claude loads `~/.claude/CLAUDE.md` and becomes the CTO. It reads `STATE.md` from the project. You describe what you want. The CTO delegates.
-
-Examples:
 ```
 "Add a revenue chart to the dashboard"
-"Fix the login redirect loop"
-"Review the auth module for security issues"
+"Fix the login redirect bug"
+"Review auth module for security"
 "Ship phase 3"
 ```
 
-The CTO routes each request through the appropriate workflow. You do not need to specify agents. You do not need to reference standards. The framework enforces them.
+## Zero Drift Guarantee
 
-## File Structure After Install
+Standards are injected into every GSD agent that writes or reviews code. The verifier and code reviewer flag standard violations. Drift cannot survive the pipeline.
 
-```
-~/.claude-gold/               ← this repo (source of truth)
-~/.claude/
-├── CLAUDE.md                 → ~/.claude-gold/CLAUDE.md (symlink)
-├── agents/                   → ~/.claude-gold/agents/ (symlinked)
-├── standards/                → ~/.claude-gold/standards/ (symlinked)
-├── skills/                   → ~/.claude-gold/skills/ (symlinked)
-├── workflows/                → ~/.claude-gold/workflows/ (symlinked)
-└── MEMORY.md                 → ~/.claude-gold/MEMORY.md (symlink)
-
-Your project/
-├── .planning/                ← created by /gsd-onboard
-│   ├── STATE.md
-│   ├── CONTEXT.md
-│   ├── ROADMAP.md
-│   └── phases/
-└── graphify-out/             ← created by Graphify
-    ├── graph.json
-    ├── GRAPH_REPORT.md
-    └── graph.html
-```
-
-## Updating
-
-```bash
-cd ~/.claude-gold && git pull
-```
-
-Symlinks auto-resolve to updated files. No reinstall needed.
-
-## Memory (Optional)
-
-Three-layer architecture documented in `MEMORY.md`:
-1. **Graphify** — codebase structure graph (free, one build)
-2. **GSD** — project state + context (free, markdown files)
-3. **TencentDB** — cross-session conversation memory (requires Docker + LLM key)
-
-Layers 1+2 are enough for most projects. Add Layer 3 when you find yourself repeating context across sessions.
-
-## Guarantee
-
-If Claude violates a standard (hand-rolls a component, uses raw hex values, skips the verify gate), that is a bug in this framework. Fix the standard. Do not accept drift.
+If a standard is violated, it means the standard wasn't clear enough. Fix the standard. The system enforces it from then on.

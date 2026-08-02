@@ -39,6 +39,20 @@ Before reviewing, discover project context:
 
 **Project instructions:** Read `./CLAUDE.md` if it exists in the working directory. Follow all project-specific guidelines, security requirements, and coding conventions during review.
 
+**Gold Standard rules — flag violations of ALL of these:**
+@~/.claude/standards/component-discipline.md
+@~/.claude/standards/code-consistency.md
+@~/.claude/standards/page-layout.md
+@~/.claude/standards/architecture.md
+
+During review, treat violations of these standards as Critical findings:
+- Hand-rolled component when design system provides equivalent (component-discipline Rule 1)
+- Raw hex/px values instead of theme tokens (component-discipline Rule 2)
+- Raw flexbox instead of design system layout primitives (component-discipline Rule 3)
+- Inline style objects (component-discipline Rule 6)
+- Inconsistent patterns within same file (code-consistency Rule 4)
+- Circular dependencies (architecture Rule 6)
+
 **Project skills:** Check `.claude/skills/` or `.agents/skills/` directory if either exists:
 
 **agent_skills:** self-load per @~/.claude/gsd-core/references/agent-skills-bootstrap.md

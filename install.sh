@@ -16,42 +16,26 @@ else
     git clone "$REPO_URL" "$INSTALL_DIR"
 fi
 
-mkdir -p "$CLAUDE_DIR"/{agents,standards,skills,workflows,commands/gsd}
+mkdir -p "$CLAUDE_DIR"/{standards,skills,commands/gsd}
 
 echo "Linking into ~/.claude/..."
 
-# --- Our files ---
-
-# CLAUDE.md
+# CLAUDE.md — the orchestrator
 ln -sf "$INSTALL_DIR/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
 
-# Our agents (flat .md files)
-for agent in "$INSTALL_DIR"/agents/*.md; do
-    [ -f "$agent" ] || continue
-    name=$(basename "$agent")
-    ln -sf "$agent" "$CLAUDE_DIR/agents/$name"
-done
-
-# Standards (flat .md files)
+# Standards — injected into GSD agents
 for std in "$INSTALL_DIR"/standards/*.md; do
     [ -f "$std" ] || continue
     name=$(basename "$std")
     ln -sf "$std" "$CLAUDE_DIR/standards/$name"
 done
 
-# Our skills (subdirectories)
+# Skills — loadable by any agent
 for skill_dir in "$INSTALL_DIR"/skills/*/; do
     skill_name=$(basename "$skill_dir")
     target="$CLAUDE_DIR/skills/$skill_name"
     rm -rf "$target"
     ln -sf "$skill_dir" "$target"
-done
-
-# Workflows (flat .md files)
-for wf in "$INSTALL_DIR"/workflows/*.md; do
-    [ -f "$wf" ] || continue
-    name=$(basename "$wf")
-    ln -sf "$wf" "$CLAUDE_DIR/workflows/$name"
 done
 
 # MEMORY.md
@@ -61,21 +45,21 @@ ln -sf "$INSTALL_DIR/MEMORY.md" "$CLAUDE_DIR/MEMORY.md"
 
 GSD_VENDOR="$INSTALL_DIR/vendor/gsd-core"
 
-# GSD commands (71 slash commands: /gsd:plan-phase, /gsd:execute-phase, etc.)
+# GSD commands (71 slash commands)
 for cmd in "$GSD_VENDOR"/commands/gsd/*.md; do
     [ -f "$cmd" ] || continue
     name=$(basename "$cmd")
     ln -sf "$cmd" "$CLAUDE_DIR/commands/gsd/$name"
 done
 
-# GSD agents (34 specialized agents)
+# GSD agents (34 specialized, patched with our standards)
 for agent in "$GSD_VENDOR"/agents/*.md; do
     [ -f "$agent" ] || continue
     name=$(basename "$agent")
     ln -sf "$agent" "$CLAUDE_DIR/agents/$name"
 done
 
-# GSD CLI tools (gsd-tools.cjs, gsd_run, etc.)
+# GSD CLI tools
 rm -rf "$CLAUDE_DIR/gsd-core"
 ln -sf "$GSD_VENDOR/gsd-core" "$CLAUDE_DIR/gsd-core"
 
@@ -108,21 +92,16 @@ fi
 
 echo ""
 echo "=== Done ==="
-echo "Installed to: $INSTALL_DIR"
 echo ""
-echo "Inbuilt (vendored, no network):"
-echo "  GSD Core         — 71 commands + 34 agents + CLI tools"
-echo "  caveman          — efficient communication"
-echo "  frontend-design  — bold, distinctive UI (from anthropics/skills)"
-echo "  ui-ux-pro-max    — 50 styles, 21 palettes, 50 fonts, 8 stacks"
-echo "  agent-browser    — browser automation skill"
-echo "  9 agents         — pm, memory, uiux, frontend, backend, qa, security, devops"
-echo "  4 standards      — component discipline, code consistency, page layout, architecture"
-echo "  4 workflows      — onboard, new-feature, bug-fix, ship"
+echo "Inbuilt (this repo):"
+echo "  CLAUDE.md        — orchestrator (routes to GSD commands)"
+echo "  standards/       — 4 anti-drift rules (injected into all GSD agents)"
+echo "  skills/          — caveman, frontend-design, ui-ux-pro-max, agent-browser"
+echo "  vendor/gsd-core/ — 71 commands + 34 agents + CLI (patched with standards)"
 echo ""
-echo "External (binaries, installed above):"
+echo "External (binaries):"
 echo "  Graphify         — codebase knowledge graph"
-echo "  Agent Browser    — browser automation CLI"
+echo "  Agent Browser    — browser automation for QA"
 echo ""
 echo "To update: cd $INSTALL_DIR && git pull"
 echo "To onboard a project: /gsd-onboard"
