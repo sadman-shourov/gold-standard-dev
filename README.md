@@ -48,7 +48,7 @@ gsd-mempalace-curator — archives learnings to CONTEXT.md
 |---|---|---|
 | Orchestrator | `CLAUDE.md` — routes to GSD commands | Every session |
 | Standards | 4 files — component-discipline, code-consistency, page-layout, architecture | gsd-executor, gsd-code-reviewer, gsd-verifier, gsd-ui-checker |
-| Skills | caveman (comms), frontend-design + ui-ux-pro-max (design), agent-browser (testing) | Orchestrator, gsd-ui-researcher, gsd-executor, gsd-verifier |
+| Skills | caveman (comms), frontend-design + ui-ux-pro-max (design), agent-browser (testing), self-heal (auto-correct drift) | Orchestrator, gsd-ui-researcher, gsd-executor, gsd-verifier, gsd-code-reviewer |
 | Framework | GSD Core — 71 slash commands + 34 agents + CLI | Entire pipeline |
 | DNA | 57 patterns extracted per project into CONTEXT.md | All agents during execution |
 | Memory | GSD mempalace (decisions → CONTEXT.md) + Graphify (code graph) | Post-milestone, on-demand |

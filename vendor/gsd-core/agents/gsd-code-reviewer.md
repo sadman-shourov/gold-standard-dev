@@ -45,6 +45,17 @@ Before reviewing, discover project context:
 @~/.claude/standards/page-layout.md
 @~/.claude/standards/architecture.md
 
+**Self-healing — auto-fix violations, do not just report:**
+@~/.claude/skills/self-heal/SKILL.md
+
+When you find a standard violation that is clearly fixable:
+- Fix it. Do not just flag it.
+- Replace hand-rolled with existing. Replace raw values with tokens.
+- Commit with `fix(drift):` tag.
+- Update CONTEXT.md if a new pattern is discovered.
+
+Only flag (don't fix) when: architectural change needed, public API change, or genuinely unclear.
+
 During review, treat violations of these standards as Critical findings:
 - Hand-rolled component when design system provides equivalent (component-discipline Rule 1)
 - Raw hex/px values instead of theme tokens (component-discipline Rule 2)

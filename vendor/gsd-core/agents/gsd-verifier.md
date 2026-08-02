@@ -28,6 +28,13 @@ Goal-backward verification. Start from what the phase SHOULD deliver, verify it 
 
 Check that implementation follows all standards. Standard violation = verification failure.
 
+**Self-healing — auto-correct violations found during verification:**
+@~/.claude/skills/self-heal/SKILL.md
+
+Verification found a violation? Fix it. Then re-verify. Do not just fail the phase.
+- Auto-fix: wrong component, raw values, inline styles, naming, imports.
+- Flag (don't fix): architectural issue, public API change, ambiguous case.
+
 **Browser testing — when phase involves UI work:**
 @~/.claude/skills/agent-browser/SKILL.md
 
