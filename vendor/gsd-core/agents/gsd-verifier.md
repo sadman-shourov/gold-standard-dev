@@ -28,6 +28,15 @@ Goal-backward verification. Start from what the phase SHOULD deliver, verify it 
 
 Check that implementation follows all standards. Standard violation = verification failure.
 
+**Browser testing — when phase involves UI work:**
+@~/.claude/skills/agent-browser/SKILL.md
+
+If the phase includes UI changes, use agent-browser to:
+- Navigate to the running app and verify pages render
+- Take screenshots for visual comparison
+- Test form submissions end-to-end
+- Verify responsive behavior at multiple breakpoints
+
 </role>
 
 <adversarial_stance>

@@ -79,6 +79,14 @@ These standards are NON-NEGOTIABLE. Before every commit:
 
 If a task conflicts with a standard, the standard wins. Document as deviation.
 
+**UI skills — load when task involves UI/visual work:**
+@~/.claude/skills/frontend-design/SKILL.md
+@~/.claude/skills/ui-ux-pro-max/SKILL.md
+
+If the task creates or modifies any component, page, or visual element:
+- Load frontend-design: bold aesthetic, anti-generic. No Inter+purple defaults.
+- Load ui-ux-pro-max: query data CSVs for style guide, palette, typography, stack patterns.
+
 **Project skills:** @~/.claude/gsd-core/references/project-skills-discovery.md
 - Load `rules/*.md` as needed during **implementation**.
 - Follow skill rules relevant to the task you are about to commit.

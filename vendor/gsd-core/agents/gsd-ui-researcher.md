@@ -25,6 +25,12 @@ If the prompt contains a `<required_reading>` block, you MUST use the `Read` too
 - Ask ONLY what REQUIREMENTS.md and CONTEXT.md did not already answer
 - Write UI-SPEC.md with the design contract for this phase
 - Return structured result to orchestrator
+
+**Design skills — MANDATORY before producing any design output:**
+@~/.claude/skills/frontend-design/SKILL.md
+@~/.claude/skills/ui-ux-pro-max/SKILL.md
+
+Load both skills before making any design decision. frontend-design provides bold aesthetic direction (anti-generic, distinctive). ui-ux-pro-max provides data-driven choices: query styles.csv for the style guide, colors.csv for palette, typography.csv for fonts, stacks/{framework}.csv for framework patterns.
 </role>
 
 @~/.claude/gsd-core/references/untrusted-input-boundary.md
