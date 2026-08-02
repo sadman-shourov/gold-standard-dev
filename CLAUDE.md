@@ -157,6 +157,20 @@ Read the project and extract every convention into `.planning/CONTEXT.md`. This 
 | **Coverage** | Thresholds? What's considered acceptable? | Read test config |
 | **E2E tests** | Do they exist? What scenarios are covered? | Find e2e test files |
 
+#### J. Language-Specific Conventions
+
+Detect which languages the project uses, then extract naming conventions for each.
+
+| Language | What to extract | How to find |
+|---|---|---|
+| **TypeScript/JavaScript** | PascalCase components, camelCase functions/variables, UPPER_CASE constants, kebab-case files, interface naming (`I` prefix or not?), enum naming, type vs interface preference | Scan components, utils, types |
+| **Go** | PascalCase exported, camelCase unexported, package naming (single word, lowercase), file naming (`snake_case.go`), interface naming (`-er` suffix?), error variable naming (`err`), context naming (`ctx`), test file convention (`_test.go`) | Scan .go files, packages |
+| **Python** | `snake_case` variables/functions, `PascalCase` classes, `UPPER_CASE` constants, `_private` prefix, `__dunder__` methods, file naming (`snake_case.py`), test file convention (`test_*.py`), package naming | Scan .py files |
+| **Rust** | `snake_case` variables/functions, `PascalCase` types/traits, `UPPER_CASE` constants, `SCREAMING_SNAKE_CASE` statics, module naming, file naming | Scan .rs files |
+| **SQL** | Table naming (plural/singular?), column naming (`snake_case`?), index naming, migration naming, enum naming | Read schema, migrations |
+| **Shell** | Variable naming (`UPPER_CASE` or `lowercase`?), function naming, file naming (`.sh` extension?), shebang convention | Scan .sh files |
+| **Docker/K8s** | Dockerfile naming, image tagging convention, k8s resource naming, label conventions | Check Dockerfile, k8s manifests |
+
 **Format each pattern in CONTEXT.md with: what the pattern is, where to find the canonical example, and a concrete code snippet.**
 
 ```markdown
@@ -244,6 +258,13 @@ Read the project and extract every convention into `.planning/CONTEXT.md`. This 
 - Mocks: MSW for API mocking. Factory functions in `test/factories/`.
 - Coverage: 80% branches. No coverage gate on CI yet.
 - Example: `__tests__/useUsers.test.ts` — canonical test.
+
+## Language Conventions
+- TypeScript: PascalCase components/interfaces, camelCase functions, kebab-case files, UPPER_CASE env/constants. Prefer `type` over `interface` for props.
+- Go: PascalCase for exported (AddUser), camelCase for unexported (validateEmail). Package: single lowercase word. Files: `snake_case.go`. Errors: `if err != nil` always. Context: `ctx context.Context` first param.
+- Python: `snake_case` functions/variables, `PascalCase` classes, `UPPER_CASE` constants. Files: `snake_case.py`. Tests: `test_*.py` at module level.
+- SQL: Tables: plural `snake_case` (`payment_batches`). Columns: singular `snake_case`. PK: `id`. FK: `{table}_id`. Timestamps: `created_at`, `updated_at`. Indexes: `idx_{table}_{column}`.
+- Example: `pkg/users/service.go`, `models/user.py` — canonical naming per language.
 ```
 
 Document every section. Leave nothing to guesswork. This becomes law. GSD agents load this alongside standards. If an agent deviates, the verifier catches it against CONTEXT.md. No drift. Ever.
