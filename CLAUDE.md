@@ -39,57 +39,212 @@ When STATE.md is missing, run this exact sequence:
 Run `/gsd:onboard`. This creates `.planning/` with PROJECT.md, REQUIREMENTS.md, ROADMAP.md, STATE.md.
 
 ### Step 2: Extract Project DNA
-Read the project and extract every convention into `.planning/CONTEXT.md`. This is the single source of truth every agent loads.
 
-**Extract these patterns — use grep/read, find canonical examples, document exactly:**
+Read the project and extract every convention into `.planning/CONTEXT.md`. This is the single source of truth every agent loads. Leave nothing to guesswork.
 
-| Category | What to extract | How to find it |
+**Extract every pattern. Use grep/read/graphify. Find canonical examples. Document exactly.**
+
+#### A. API Layer
+
+| Category | What to extract | How to find |
 |---|---|---|
-| **Design tokens** | Colors, spacing scale, typography, breakpoints | Read `theme.ts`, `tailwind.config.*`, CSS variables |
-| **Component library** | Every existing component, props, when to use | Scan `components/ui/`, `components/`, read index files |
-| **Page layouts** | Shell, header, sidebar, grid patterns | Read 2-3 page files, find the repeated structure |
-| **API calls** | How data is fetched. One pattern or many? | Search for `fetch(`, `axios`, `useQuery`, `useSWR` |
-| **State management** | Redux, Context, Zustand, React Query? | Search for `createStore`, `useContext`, `create` |
-| **Routing** | File-based (Next.js) or programmatic? | Check `pages/` or `app/` structure |
-| **Forms** | Validation library, submission pattern | Search for `useForm`, `formik`, `react-hook-form` |
-| **Loading states** | Skeleton, spinner, or custom? | Find `<Loading`, `<Skeleton`, `<Spinner` |
-| **Empty states** | Pattern for "no data" views | Find `<Empty`, "no data", "no results" |
-| **Error handling** | Error boundaries, toast, inline? | Find `<ErrorBoundary`, `<ErrorState`, `toast.error` |
-| **File structure** | Component-per-file? Co-located styles? | Scan directory structure patterns |
-| **Import conventions** | Barrel exports? Path aliases? | Check `tsconfig.json` paths, index files |
-| **Auth pattern** | How is auth checked? Middleware? Hook? | Search for `useAuth`, `getServerSession`, `middleware` |
-| **Testing** | Jest, Vitest, Cypress, Playwright? | Check `package.json`, test file locations |
+| **Naming conventions** | RESTful? RPC? `/api/resource/:id` or `/api/getResource`? Plural or singular? | Read route files, API handlers |
+| **Endpoint structure** | Versioned? `/v1/`, `/api/`? Grouped by resource? | Map all routes |
+| **Request format** | Body shape, query params, headers. Is there a standard wrapper? | Read 3-4 API handlers |
+| **Response format** | Standard envelope? `{ data, error, meta }`? Pagination shape? | Read API responses |
+| **Error responses** | Status codes used. Error body shape. Validation error format. | Find error handling middleware |
+| **Auth on endpoints** | How is auth enforced? Middleware? Decorator? Per-route check? | Search for auth in API layer |
+| **Validation** | Where does validation live? Zod, Joi, class-validator? Request vs service layer? | Find validation code |
+| **Pagination** | Cursor-based? Offset? Page numbers? How is it passed and returned? | Find pagination usage |
+| **Filtering/Search** | Query params? POST body? How are filters passed? Naming convention? | Find filter/search logic |
+| **Sorting** | `?sort=name:asc` or `?orderBy=name&order=asc`? | Find sort parameters |
 
-**Format each pattern in CONTEXT.md exactly like this:**
+#### B. Data Layer
+
+| Category | What to extract | How to find |
+|---|---|---|
+| **Data fetching** | React Query? SWR? Apollo? Manual fetch? One pattern or many? | Search for `useQuery`, `fetch(`, `axios` |
+| **Mutations** | `useMutation`? Manual POST? Optimistic updates? | Search for mutation patterns |
+| **Cache strategy** | Stale time, cache keys, invalidation. When is cache busted? | Read QueryClient config |
+| **Data transformation** | API response → UI model. Where is it done? Hook? Selector? | Find mapping/transform code |
+| **State management** | Redux, Zustand, Context, Jotai? Server state vs client state? | Search for stores, contexts |
+| **Database access** | ORM? Prisma, Drizzle, Knex? Raw SQL? Repository pattern? | Check schema files, DB code |
+
+#### C. Page Behavior
+
+| Category | What to extract | How to find |
+|---|---|---|
+| **Page lifecycle** | What happens when a page loads? Fetch → loading → render → error? | Read 2-3 page components |
+| **Data loading flow** | Server-side (SSR/SSG) or client-side? Where is data fetched? | Check `getServerSideProps`, `useEffect` + fetch |
+| **Loading states** | Skeleton? Spinner? Full page loader? Component-level? | Find loading components |
+| **Empty states** | "No data" pattern. Icon + message + action? Custom per page? | Find empty state components |
+| **Error states** | Error boundary? Inline error? Toast? Retry button? | Find error handling |
+| **Filter/search UX** | Where do filters live? Sidebar? Top bar? Modal? How are they applied? | Read filter components |
+| **Pagination UX** | Infinite scroll? Page numbers? Load more button? | Find pagination components |
+| **Form submission** | Validation on blur or submit? How are errors shown? Redirect after? | Read 2-3 forms |
+| **Optimistic UI** | Does the project use optimistic updates? Where? | Search for `optimistic` |
+| **Refetch triggers** | When does data refresh? Focus? Interval? Manual? Mutation success? | Check QueryClient config |
+
+#### D. Auth & Permissions
+
+| Category | What to extract | How to find |
+|---|---|---|
+| **Auth flow** | JWT? Session cookie? OAuth? How is token stored/sent? | Read auth config, middleware |
+| **Login/logout** | Custom page or hosted? Redirect behavior? Token refresh? | Read auth pages/handlers |
+| **Role system** | What roles exist? Admin, user, manager? Defined where? | Find role definitions, enums |
+| **Permission checks (FE)** | How does frontend check permissions? Hook? HOC? Wrapper component? | Search for `useRole`, `usePermission`, `<Protected` |
+| **Permission checks (BE)** | Middleware? Guard? Decorator? Per-endpoint or per-service? | Find backend auth code |
+| **Route guards** | How are protected routes handled? Redirect to login? 403 page? | Find route protection |
+| **API authorization** | Are endpoints role-gated? How is role checked against endpoint? | Read protected endpoints |
+
+#### E. Frontend Architecture
+
+| Category | What to extract | How to find |
+|---|---|---|
+| **Component patterns** | Server vs client components (Next.js)? Presentational vs container? | Read component files |
+| **Props conventions** | Props interface naming? Callbacks: `onX` or `handleX`? | Check component interfaces |
+| **Composition** | Slots? Render props? Compound components? | Find composition patterns |
+| **Side effects** | Where do side effects live? `useEffect`? Event handlers? | Search for `useEffect` |
+| **Custom hooks** | What hooks exist? Naming pattern? Single responsibility? | List all hooks |
+| **Context usage** | What's in context? Theme? Auth? Feature-specific? | Find context providers |
+| **Event handling** | Inline handlers or named functions? Debounce/throttle? | Read event handlers |
+
+#### F. Styling & Design
+
+| Category | What to extract | How to find |
+|---|---|---|
+| **Design tokens** | Colors, spacing, typography, breakpoints, shadows, radii | Read theme/config file |
+| **Component library** | Every existing component, all props, when to use each | Scan `components/ui/`, read barrel |
+| **Page layouts** | Shell, header, sidebar, content area, grid system | Read 3-4 page files |
+| **Responsive strategy** | Mobile-first? Breakpoints used? Hidden/shown at which sizes? | Check responsive code |
+| **Animation** | Framer Motion? CSS transitions? Spring patterns? | Find animation imports |
+| **Icon system** | Which icon library? How are icons imported? Custom icons? | Check icon usage |
+
+#### G. Code Quality
+
+| Category | What to extract | How to find |
+|---|---|---|
+| **Linting** | ESLint config. Which rules? Prettier? Custom rules? | Read eslint config |
+| **Formatting** | Prettier config. Tabs or spaces? Quotes? Semicolons? | Read prettier config |
+| **TypeScript strictness** | Strict mode? `any` usage policy? Type-only imports? | Read tsconfig |
+| **Import order** | Convention for import grouping? Absolute vs relative? | Read import blocks in 5 files |
+| **Naming** | PascalCase components, camelCase functions, UPPER_CASE constants? | Observe patterns |
+| **File naming** | `kebab-case.tsx` or `PascalCase.tsx`? Index files as barrels? | Check file names |
+| **Comment convention** | JSDoc? Inline? TODO format? | Check comment patterns |
+| **Error boundaries** | Where are error boundaries placed? Per-route? Per-component? | Find ErrorBoundary |
+
+#### H. DevOps & Config
+
+| Category | What to extract | How to find |
+|---|---|---|
+| **Environment variables** | How are they loaded? Validated? Typed? Required vs optional? | Read env files, config |
+| **Build config** | Webpack? Vite? Turbopack? Custom config? | Read build config |
+| **CI/CD** | GitHub Actions? What runs on push/PR? | Check `.github/workflows/` |
+| **Deploy** | Vercel? Docker? Manual? What triggers deploy? | Check deploy config |
+| **Logging** | What logger? Pino? Winston? Console? Structured? | Find logger usage |
+| **Monitoring** | Sentry? Datadog? Custom? Error tracking? | Search for monitoring |
+
+#### I. Testing
+
+| Category | What to extract | How to find |
+|---|---|---|
+| **Test framework** | Jest? Vitest? Playwright? Cypress? | Read package.json |
+| **Test location** | `__tests__/`? Co-located `.test.ts`? `tests/`? | Find test files |
+| **Test patterns** | Arrange-Act-Assert? Given-When-Then? | Read 3-4 test files |
+| **Mock strategy** | MSW? jest.mock? Factory functions? | Find mock setup |
+| **Coverage** | Thresholds? What's considered acceptable? | Read test config |
+| **E2E tests** | Do they exist? What scenarios are covered? | Find e2e test files |
+
+**Format each pattern in CONTEXT.md with: what the pattern is, where to find the canonical example, and a concrete code snippet.**
 
 ```markdown
-## API Calls
-- Pattern: React Query (`useQuery` / `useMutation`)
-- Every API call is a custom hook in `hooks/`
-- Error handling: try/catch in hook, toast on failure
-- Loading: `isLoading` from useQuery, render `<PageLoader />`
-- Example: `hooks/useUserData.ts`
+## API Layer
+- Naming: RESTful. `/api/resource/:id`. Plural nouns. No verbs in URLs.
+- Response envelope: `{ data: T, error?: { code, message }, meta?: { total, page } }`
+- Error format: `{ error: { code: "VALIDATION_ERROR", message: "...", fields?: {...} } }`
+- Auth: Bearer token in Authorization header. Middleware: `withAuth()`.
+- Validation: Zod schemas in `validators/`. Called in route handler before service.
+- Pagination: Offset-based. `?page=1&limit=20`. Returns `{ data, meta: { total, page, limit } }`.
+- Filtering: Query params. `?status=active&role=admin`. Naming matches DB columns.
+- Sorting: `?sort=createdAt&order=desc`. Allowed columns whitelisted per endpoint.
+- Example: `pages/api/users/[id].ts` — canonical endpoint structure.
 
-## Component Library
-- UI primitives: `src/components/ui/` (Button, Input, Card, Modal, etc.)
-- Import from barrel: `import { Button } from '@/components/ui'`
-- NEVER create a new button. Use `<Button variant="...">`.
-- Existing components: [list every component found with brief description]
+## Data Layer
+- Fetching: React Query via custom hooks in `hooks/`. `useQuery` for GET, `useMutation` for POST/PUT/DELETE.
+- Cache: staleTime=5min, gcTime=30min. Invalidation on mutation success via `queryClient.invalidateQueries`.
+- Transform: API response transformed in hook before returning to component. No raw API types in components.
+- State: Zustand store at `stores/`. Only for client state (ui preferences, filters). Server state = React Query.
+- Database: Prisma ORM. Schema at `prisma/schema.prisma`. Repository pattern in `lib/repositories/`.
+- Example: `hooks/useUsers.ts` — canonical data fetching hook.
 
-## Page Layout
-- Shell: `<PageShell>` wraps every page
-- Structure: PageShell → PageHeader (title + actions) → PageBody (Grid) → Cards
-- Spacing: page padding `theme.spacing(3)`, card gap `theme.spacing(3)`
-- Responsive: `xs={12} sm={6} md={4}` for card grids
+## Page Behavior
+- Lifecycle: Page shell renders → fetch triggered in hook → loader shown → data renders OR error state.
+- Loading: `<PageLoader />` for full page. `<Skeleton variant="card" />` for component-level.
+- Empty: `<EmptyState icon={...} title="No users" description="..." action={<Button>Create</Button>} />`.
+- Error: `<ErrorState message="..." onRetry={refetch} />`. No inline errors on pages.
+- Filters: Sidebar on desktop, drawer on mobile. Applied via query params, refetch on change.
+- Pagination: `<Pagination />` at bottom. Shows "1-20 of 156".
+- Forms: React Hook Form + Zod. Validate on submit. Errors shown inline under field.
+- Optimistic: Used for toggle actions (like/bookmark). Rollback on error.
+- Example: `app/dashboard/users/page.tsx` — canonical page.
 
-## Design Tokens
-- Colors: primary=#E31E24, secondary=#003D6B, background=#FFFFFF
-- Typography: Titillium Web (400, 600, 700). max weight: 700
-- Spacing: theme.spacing() scale. Never raw px.
-- Breakpoints: xs=0, sm=600, md=900, lg=1200, xl=1536
+## Auth & Permissions
+- Auth: NextAuth.js with JWT. Stored in HTTP-only cookie. Refreshed automatically.
+- Login: Custom page at `/login`. Redirects to `callbackUrl` after success.
+- Roles: `admin`, `manager`, `user`, `viewer`. Defined in `types/auth.ts`.
+- FE checks: `useRole()` hook returns current role. `<ProtectedRole role="admin">` wrapper.
+- BE checks: `requireRole("admin")` middleware on API routes. Returns 403 if insufficient.
+- Route guards: `middleware.ts` redirects unauthenticated users to `/login`.
+- API auth: Every endpoint except `/api/auth/*` requires valid session. Checked in `withAuth()`.
+- Example: `middleware.ts`, `hooks/useAuth.ts` — canonical auth patterns.
+
+## Frontend Architecture
+- Components: Server components by default. Client components only when interactive.
+- Props: Interface named `ComponentNameProps`. Callbacks: `onXxx`. No `handle` prefix in props.
+- Composition: Children prop for wrapping. Compound components for complex patterns (e.g., `<Tabs><Tab>...`).
+- Side effects: In event handlers only. No `useEffect` for data fetching.
+- Hooks: One hook, one responsibility. Naming: `use<Feature><Action>` (e.g., `useUserCreate`).
+- Events: Named handler functions. `handleSubmit`, `handleDelete`. No inline arrow functions.
+- Example: `components/UserList.tsx` — canonical component pattern.
+
+## Styling & Design
+- Colors: primary=#E31E24 (red), secondary=#003D6B (cobalt). See `theme.ts`.
+- Type: Titillium Web (400, 600, 700). Max weight 700. No 800/900.
+- Spacing: `theme.spacing(n)`. Scale: 0, 1(8px), 2(16px), 3(24px), 4(32px), 6(48px).
+- Components: MUI v5. Import from `@mui/material`. Custom components in `components/ui/`.
+- Layout: `<PageShell>` → `<PageHeader>` → `<PageBody>` → `<Grid container spacing={3}>`.
+- Responsive: Mobile-first. `display={{ xs: 'none', md: 'block' }}`. Card grid: `xs={12} sm={6} md={4}`.
+- Icons: MUI Icons. `import { Dashboard } from '@mui/icons-material'`.
+- Example: `theme.ts`, `components/ui/PageShell.tsx` — canonical design.
+
+## Code Quality
+- Lint: ESLint + Prettier. `eslint-config-next` + custom rules in `.eslintrc.js`.
+- TS: Strict mode on. No `any` without eslint-disable comment. Type-only imports preferred.
+- Imports: React/Next → external libs → internal modules → types. One blank line between groups.
+- Naming: PascalCase components. camelCase functions/variables. UPPER_CASE constants.
+- Files: `kebab-case.tsx` for components. `index.ts` as barrel exports.
+- Comments: JSDoc for public APIs. `// TODO(username):` for todos.
+- Error boundary: One at app root. Per-feature boundaries for critical sections.
+- Example: `.eslintrc.js`, `.prettierrc` — canonical quality config.
+
+## DevOps
+- Env: `env.mjs` validates with Zod. `NEXT_PUBLIC_*` for client. No secrets on client.
+- Build: Next.js with Turbopack. Custom webpack config for SVGs.
+- CI: GitHub Actions. Lint → Type check → Test → Build on every PR.
+- Deploy: Vercel. Auto-deploy on merge to main. Preview deploys on PR.
+- Logger: Pino for server. `console.error` only for caught errors with context.
+- Example: `.github/workflows/ci.yml` — canonical CI.
+
+## Testing
+- Framework: Vitest for unit/integration. Playwright for E2E.
+- Location: `__tests__/` next to source files. E2E at `e2e/`.
+- Pattern: Arrange-Act-Assert. Test files mirror source structure.
+- Mocks: MSW for API mocking. Factory functions in `test/factories/`.
+- Coverage: 80% branches. No coverage gate on CI yet.
+- Example: `__tests__/useUsers.test.ts` — canonical test.
 ```
 
-Document every pattern the project uses. This becomes law. GSD agents load this alongside standards. If an agent deviates, the verifier catches it against CONTEXT.md.
+Document every section. Leave nothing to guesswork. This becomes law. GSD agents load this alongside standards. If an agent deviates, the verifier catches it against CONTEXT.md. No drift. Ever.
 
 ### Step 3: Build Graph
 Run `/graphify .` — builds the knowledge graph in `graphify-out/`.
