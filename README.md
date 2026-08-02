@@ -25,6 +25,7 @@
 │  + DNA        │     │ + DNA         │     │ + DNA         │
 │  + graphify   │     │ + design skills│    │ + self-heal   │
 │               │     │               │     │ + agent-browser│
+│               │     │               │     │ + exploratory QA│
 └───────────────┘     └───────────────┘     └───────────────┘
         │                       │                       │
         ▼                       ▼                       ▼

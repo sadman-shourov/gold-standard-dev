@@ -39,10 +39,70 @@ Verification found a violation? Fix it. Then re-verify. Do not just fail the pha
 @~/.claude/skills/agent-browser/SKILL.md
 
 If the phase includes UI changes, use agent-browser to:
+
+### Standard Verification
 - Navigate to the running app and verify pages render
 - Take screenshots for visual comparison
 - Test form submissions end-to-end
 - Verify responsive behavior at multiple breakpoints
+
+### Exploratory QA — Try to Break It
+After standard verification, run these destructive tests:
+
+**Forms:**
+- Submit empty form → expect validation errors shown
+- Submit with one field filled → expect specific error, not generic
+- Paste 5000 chars into text field → expect no crash, graceful truncation
+- Enter special chars (`<script>alert(1)</script>`) → expect no XSS
+- Rapid double-click submit → expect only one submission
+- Leave required dropdowns empty → expect clear error message
+
+**Navigation:**
+- Browser back button after form submit → expect no double-submit
+- Refresh page mid-form → expect state preserved or clear warning
+- Click links rapidly → expect no broken state
+- Direct URL to protected page while logged out → expect redirect to login
+
+**Data Display:**
+- Page with 0 items → expect empty state, not blank page
+- Page with 1 item → expect no "1 items" plural bug
+- Long text in table cell → expect truncation, not overflow
+- Very long page title → expect ellipsis, not layout break
+
+**Auth & Permissions:**
+- Login with wrong password → expect clear error, not generic "error"
+- Logout then browser back → expect redirect, not cached page
+- View page as different role → expect correct access control
+
+**Edge Cases:**
+- Resize browser to 320px wide → expect no horizontal scroll
+- Disable JavaScript → expect meaningful fallback or message
+- Click disabled button → expect nothing happens, no console error
+- Rapid filter/sort changes → expect no visual flicker or crash
+
+### QA Report Format
+After testing, produce `QA-REPORT.md`:
+```markdown
+## QA Report — Phase {N}
+
+| Test | Result | Screenshot | Notes |
+|---|---|---|---|
+| Empty form submit | ✅ PASS | — | Validation shown correctly |
+| 5000 char input | ⚠️ WARN | [screenshot] | Accepts but truncates without message |
+| XSS attempt | ✅ PASS | — | Escaped properly |
+| Protected URL while logged out | ❌ FAIL | [screenshot] | Shows 500 instead of redirect |
+
+### Issues Found
+1. ❌ **Protected URL returns 500** — Should redirect to /login
+2. ⚠️ **Long input accepted silently** — Should show character limit
+
+### Explorer Notes
+- App feels fast. No loading jank.
+- Mobile nav works but hamburger icon too small at 320px.
+- Dark mode toggle works but doesn't persist on refresh.
+```
+
+Attach screenshots for every FAIL and WARN result. Save to phase directory.
 
 </role>
 
