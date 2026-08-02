@@ -109,6 +109,54 @@ Claude: /gsd:plan-phase  →  /gsd:execute-phase  →  /gsd:verify-work  →  /g
 
 ---
 
+## 🧪 QA Pipeline
+
+Every phase ships through 4 QA gates. No exceptions.
+
+```
+ Code written
+     │
+     ▼
+┌──────────────────┐
+│ 1. Code Review   │  Static analysis. Bug hunt. Security scan.
+│ /gsd:code-review │  Flags standard violations. Self-heals drift.
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│ 2. Verification  │  Goal-backward. Did phase deliver what it promised?
+│ /gsd:verify-work │  Checks every requirement against actual code.
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│ 3. Exploratory QA│  Opens the deployed app. Tries to break it.
+│ (agent-browser)  │  Empty forms. XSS injection. 320px mobile.
+│                  │  Wrong passwords. Rapid clicks. Disabled JS.
+│                  │  Produces QA-REPORT.md with screenshots.
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│ 4. UAT Audit     │  Scans ALL phases for pending test items.
+│ /gsd:audit-uat   │  Produces prioritized human test plan.
+└────────┬─────────┘
+         │
+         ▼
+     /gsd:ship
+```
+
+| Gate | Tool | Type |
+|---|---|---|
+| Code Review | `gsd-code-reviewer` | Static — bugs, security, standards |
+| Verification | `gsd-verifier` | Structural — requirements vs reality |
+| Exploratory QA | `agent-browser` + `gsd-verifier` | Behavioral — real browser, real clicks |
+| UAT Audit | `gsd:audit-uat` | Cross-phase — pending items, stale docs |
+
+Broken app doesn't ship. Period.
+
+---
+
 ## 🔁 Self-Healing Loop
 
 ```
