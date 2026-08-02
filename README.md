@@ -16,16 +16,26 @@ An operating system for Claude Code. Load this repo. It tells Claude how to buil
 | `install.sh` | One-command setup script | Run once on first use |
 | `MEMORY.md` | Three-layer memory architecture | Read during `/gsd-onboard` |
 
+## Skills (Bundled)
+
+Four skills ship with this repo. No external install needed.
+
+| Skill | Files | What it does |
+|---|---|---|
+| `caveman/` | `SKILL.md` | Ultra-compressed communication |
+| `frontend-design/` | `SKILL.md`, `LICENSE.txt` | Bold, distinctive web design. Source: `anthropics/skills` |
+| `ui-ux-pro-max/` | `SKILL.md`, `data/` (19 CSVs), `scripts/` | 50 styles, 21 palettes, 50 font pairings, 20 charts, 8 stacks. Source: `binjuhor/shadcn-lar` |
+| `agent-browser/` | `SKILL.md` | Browser automation for testing/QA. Source: `vercel-labs/agent-browser` |
+
 ## External Tools Required
 
-This repo references four external tools. `install.sh` installs them. None are bundled here.
+`install.sh` installs these. None are bundled.
 
 | Tool | What it does | Install command |
 |---|---|---|
-| **GSD Core** | Phase loop (Discuss→Plan→Execute→Verify→Ship) + 35 subagents | `npx @opengsd/gsd-core@latest` |
-| **Graphify** | Codebase knowledge graph (nodes, edges, communities) | `pip install graphifyy` |
-| **Claude Code skills** | frontend-design, ui-ux-pro-max | `npx skills add anthropics/skills --skill frontend-design` |
-| **Agent Browser** | Browser automation for QA/testing | `npm i -g agent-browser && agent-browser install` |
+| **GSD Core** | Phase loop + 35 subagents | `npx @opengsd/gsd-core@latest` |
+| **Graphify** | Codebase knowledge graph | `pip install graphifyy` |
+| **Agent Browser** | Browser automation CLI (used by QA agent) | `npm i -g agent-browser && agent-browser install` |
 
 ## One-Command Install
 
